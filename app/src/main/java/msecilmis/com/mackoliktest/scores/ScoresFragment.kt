@@ -1,4 +1,4 @@
-package msecilmis.com.mackoliktest
+package msecilmis.com.mackoliktest.scores
 
 
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import msecilmis.com.mackoliktest.R
 
 
 class ScoresFragment : Fragment() {

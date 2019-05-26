@@ -1,9 +1,11 @@
 package msecilmis.com.mackoliktest
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.Resources.Theme
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.ThemedSpinnerAdapter
 import android.view.View
@@ -11,19 +13,47 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
+import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasActivityInjector
+import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.list_item.view.*
+import msecilmis.com.mackoliktest.news.NewsFragment
+import msecilmis.com.mackoliktest.scores.ScoresFragment
+import msecilmis.com.mackoliktest.util.IFragmentNavigationSubject
+import msecilmis.com.mackoliktest.util.Toaster
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
+    IFragmentNavigationSubject {
+
+    override fun supportFragmentManager(): FragmentManager {
+        return supportFragmentManager
+    }
+
+    override val mainContentId: Int
+        get() = R.id.container
+
+    @Inject
+    lateinit var fragmentDispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+
+    @Inject
+    lateinit var toaster: Toaster
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        toaster.shortToast("Injection works")
+
         // Setup spinner
         spinner.adapter = MyAdapter(
-                this,
-                arrayOf("News", "Scores", "Standings"))
+            this,
+            arrayOf("News", "Scores", "Standings")
+        )
 
         spinner.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
@@ -41,8 +71,8 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 supportFragmentManager.beginTransaction()
-                        .replace(R.id.container, fragment)
-                        .commit()
+                    .replace(R.id.container, fragment)
+                    .commit()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -52,7 +82,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private class MyAdapter(context: Context, objects: Array<String>) : ArrayAdapter<String>(context, R.layout.list_item, objects), ThemedSpinnerAdapter {
+    private class MyAdapter(context: Context, objects: Array<String>) :
+        ArrayAdapter<String>(context, R.layout.list_item, objects), ThemedSpinnerAdapter {
         private val mDropDownHelper: ThemedSpinnerAdapter.Helper = ThemedSpinnerAdapter.Helper(context)
 
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -79,6 +110,11 @@ class MainActivity : AppCompatActivity() {
             mDropDownHelper.dropDownViewTheme = theme
         }
     }
+
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> {
+        return fragmentDispatchingAndroidInjector
+    }
+
 
 
 }
