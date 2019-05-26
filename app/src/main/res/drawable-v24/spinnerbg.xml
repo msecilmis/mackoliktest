@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- disabled state -->
-    <!--<item android:drawable="@color/colorPrimary" android:state_enabled="false" />-->
-    <!-- unselected state -->
-    <item android:drawable="@drawable/spbackgroundunselected" android:state_enabled="true" android:state_window_focused="true" />
-    <!-- dropdown list state -->
-    <!--<item android:drawable="@color/colorPrimaryDark" android:state_enabled="true" android:state_focused="true" />-->
-
+    <item android:drawable="@drawable/spbackgroundunselected" android:state_enabled="true"
+          android:state_window_focused="true"/>
     <!-- default -->
     <item android:drawable="@drawable/spbackgroundselected"></item>
 </selector>

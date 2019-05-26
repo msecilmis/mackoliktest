@@ -24,7 +24,7 @@
             android:background="@drawable/spinnerbg"
             android:dropDownWidth="600dp"
             android:overlapAnchor="false"
-            android:padding="10dp"
+            android:padding="5dp"
             android:popupBackground="@color/colorPrimaryDark" />
 
     </FrameLayout>

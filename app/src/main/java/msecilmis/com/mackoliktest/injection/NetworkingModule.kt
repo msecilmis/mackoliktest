@@ -1,7 +1,5 @@
 package msecilmis.com.mackoliktest.injection
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import msecilmis.com.mackoliktest.MackolikApplication
@@ -10,10 +8,9 @@ import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-
-import javax.inject.Singleton
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 
 @Module
@@ -36,15 +33,10 @@ class NetworkingModule {
     @Provides
     @Singleton
     internal fun retrofit(client: OkHttpClient): Retrofit {
-        val gson = GsonBuilder()
-            .create()
-
-
-        val gsonConverterFactory = GsonConverterFactory.create(gson)
         return Retrofit.Builder()
             .client(client)
             .baseUrl("http://www.mobilefeeds.performgroup.com")
-            .addConverterFactory(gsonConverterFactory)
+            .addConverterFactory(SimpleXmlConverterFactory.create())
             .build()
     }
 
