@@ -30,14 +30,13 @@ internal abstract class MainActivityModule {
     @ActivityScope
     internal abstract fun bindNavSubject(activity: MainActivity): IFragmentNavigationSubject
 
+    @Binds
+    @ActivityScope
+    abstract fun mainActivityNavigationManager(navigationManager: NavigationManager): INavigationManager
+
     @Module
     companion object {
 
-        @Provides
-        @ActivityScope
-        fun mainActivityNavigationManager(activity: IFragmentNavigationSubject): INavigationManager {
-            return NavigationManager(activity)
-        }
 
         @Provides
         @ActivityScope

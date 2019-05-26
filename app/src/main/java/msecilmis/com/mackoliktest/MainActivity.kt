@@ -1,6 +1,5 @@
 package msecilmis.com.mackoliktest
 
-import android.app.Activity
 import android.content.Context
 import android.content.res.Resources.Theme
 import android.os.Bundle
@@ -16,31 +15,32 @@ import android.widget.ArrayAdapter
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.list_item.view.*
-import msecilmis.com.mackoliktest.news.NewsFragment
-import msecilmis.com.mackoliktest.scores.ScoresFragment
 import msecilmis.com.mackoliktest.util.IFragmentNavigationSubject
+import msecilmis.com.mackoliktest.util.INavigationManager
 import msecilmis.com.mackoliktest.util.Toaster
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     IFragmentNavigationSubject {
+    override fun mainContentId(): Int {
+        return R.id.container
+    }
 
     override fun supportFragmentManager(): FragmentManager {
         return supportFragmentManager
     }
-
-    override val mainContentId: Int
-        get() = R.id.container
 
     @Inject
     lateinit var fragmentDispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
 
     @Inject
     lateinit var toaster: Toaster
+
+    @Inject
+    lateinit var navigationManager: INavigationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -61,18 +61,17 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
                 // container view.
                 spinner.text1.text = ""
 
-                var fragment: Fragment
-
                 when (position) {
-                    0 -> fragment = NewsFragment.newInstance()
-                    1 -> fragment = ScoresFragment.newInstance()
-                    2 -> return
+                    0 -> {
+                        navigationManager.showNews()
+                        return
+                    }
+                    1 -> {
+                        navigationManager.showScores()
+                        return
+                    }
                     else -> return
                 }
-
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, fragment)
-                    .commit()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -114,7 +113,6 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
         return fragmentDispatchingAndroidInjector
     }
-
 
 
 }

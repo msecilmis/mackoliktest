@@ -5,8 +5,7 @@ import android.support.v4.app.FragmentManager
 
 interface IFragmentNavigationSubject {
 
-    @get:IdRes
-    abstract val mainContentId: Int
+    fun mainContentId(): Int
 
     fun supportFragmentManager(): FragmentManager
 }

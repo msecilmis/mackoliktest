@@ -1,24 +1,25 @@
 package msecilmis.com.mackoliktest.util
 
 import android.support.v4.app.FragmentManager
+import msecilmis.com.mackoliktest.R
+import msecilmis.com.mackoliktest.news.NewsFragment
+import msecilmis.com.mackoliktest.scores.ScoresFragment
+import javax.inject.Inject
 
-class NavigationManager(private val navSubject: IFragmentNavigationSubject) : INavigationManager {
+class NavigationManager @Inject constructor(private val navSubject: IFragmentNavigationSubject) : INavigationManager {
 
     private val supportFragmentManager: FragmentManager = navSubject.supportFragmentManager()
 
     override fun showNews() {
-        val supportFragmentManager = this.supportFragmentManager
-        //        supportFragmentManager.popBackStackImmediate(HomeFragment.TAG, 0);
-        supportFragmentManager.popBackStackImmediate("", 0)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.container, NewsFragment.newInstance())
+            .commit()
     }
 
     override fun showScores() {
-        //        supportFragmentManager.beginTransaction()
-        //                .addToBackStack(DetailsFragment.TAG)
-        //                .replace(navSubject.getMainContentId(),
-        //                        DetailsFragment.newInstance(),
-        //                        DetailsFragment.TAG)
-        //                .commitAllowingStateLoss();
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.container, ScoresFragment.newInstance())
+            .commit()
     }
 
 }
