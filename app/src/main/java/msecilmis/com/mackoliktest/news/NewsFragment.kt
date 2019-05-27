@@ -26,6 +26,8 @@ class NewsFragment : Fragment(), NewsContract.View {
 
     lateinit var newsAdapter: NewsAdapter
 
+    lateinit var newsDetailFragment: NewsDetailFragment
+
     var newsItemViewModels: MutableList<NewsItemViewModel> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +47,14 @@ class NewsFragment : Fragment(), NewsContract.View {
 
         newsPresenterImpl = NewsPresenterImpl(this, newsService)
 
-        newsAdapter = NewsAdapter(newsItemViewModels, Picasso.with(context))
+        newsAdapter = NewsAdapter(newsItemViewModels, Picasso.with(context),
+            object : NewsAdapter.IOnNewsItemClickListener {
+                override fun onNewsItemClick(newsItemViewModel: NewsItemViewModel) {
+                    newsDetailFragment = NewsDetailFragment.newInstance(newsItemViewModel.detailUrl)
+                    newsDetailFragment.show(childFragmentManager, "SHOW_NEWS_DETAIL")
+                }
+
+            })
         view.rv_news.adapter = newsAdapter
 
         newsPresenterImpl.loadNews()

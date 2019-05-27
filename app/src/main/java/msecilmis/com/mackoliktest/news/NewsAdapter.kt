@@ -10,7 +10,11 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.news_item.view.*
 import msecilmis.com.mackoliktest.R
 
-class NewsAdapter(val newsItemViewModels: List<NewsItemViewModel>, val picasso: Picasso) :
+class NewsAdapter(
+    val newsItemViewModels: List<NewsItemViewModel>,
+    val picasso: Picasso,
+    val onNewsItemClickListener: IOnNewsItemClickListener
+) :
     RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder {
@@ -37,6 +41,7 @@ class NewsAdapter(val newsItemViewModels: List<NewsItemViewModel>, val picasso: 
         }
 
         viewHolder.divider.visibility = dividerVisibility
+        viewHolder.itemView.setOnClickListener { onNewsItemClickListener.onNewsItemClick(newsItemViewModel) }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -44,5 +49,9 @@ class NewsAdapter(val newsItemViewModels: List<NewsItemViewModel>, val picasso: 
         val tvTitle: TextView = itemView.tv_news_item_title
         val tvPubDate: TextView = itemView.tv_news_item_date
         val divider: View = itemView.divider
+    }
+
+    interface IOnNewsItemClickListener {
+        fun onNewsItemClick(newsItemViewModel: NewsItemViewModel)
     }
 }
