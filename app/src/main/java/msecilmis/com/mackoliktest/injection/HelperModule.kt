@@ -3,9 +3,7 @@ package msecilmis.com.mackoliktest.injection
 import dagger.Module
 import dagger.Provides
 import msecilmis.com.mackoliktest.LoadingProgressBar
-import msecilmis.com.mackoliktest.networking.Api
-import msecilmis.com.mackoliktest.networking.INewsService
-import msecilmis.com.mackoliktest.networking.NewsService
+import msecilmis.com.mackoliktest.networking.*
 
 @Module(subcomponents = arrayOf(StaticComponent::class))
 class HelperModule {
@@ -13,6 +11,11 @@ class HelperModule {
     @Provides
     internal fun newsService(api: Api): INewsService {
         return NewsService(api)
+    }
+
+    @Provides
+    internal fun scoresService(api: Api): IScoresService {
+        return ScoresService(api)
     }
 
     @Provides
